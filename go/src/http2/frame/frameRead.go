@@ -57,12 +57,27 @@ func printErr(msg string, err error) {
 }
 
 func dispFrame (frame http2.Frame) {
+//	var setId uint16
+//	var setval uint32
 
 	fmt.Printf("fh type: %d: %s\n", frame.Header().Type, cvtFrameTyp(int(frame.Header().Type)))
 	fmt.Printf("fh flag: %d\n", frame.Header().Flags)
 	fmt.Printf("fh length: %d\n", frame.Header().Length)
 	fmt.Printf("fh streamid: %d\n", frame.Header().StreamID)
+	if frame.Header().Type == 4 {
+		idnum := frame.Header().Length/6
+		fmt.Printf("settings: %d\n", idnum)
 
+	}
+
+	switch frame.(type) {
+		case *http2.SettingsFrame:
+			fmt.Println("Settings Frame")
+
+		default:
+		fmt.Println("not known yet!")
+
+	}
 //	headersframe := (frame1.(*http2.HeadersFrame))
 //	fmt.Printf("stream ended? %v\n", headersframe.StreamEnded())
 //	fmt.Printf("block fragment: %x\n", headersframe.HeaderBlockFragment())
@@ -103,7 +118,7 @@ func main () {
 	frame, err := framer.ReadFrame()
 
 	printErr("read frame", err)
-	fmt.Printf("frame: %v\n", frame)
+	fmt.Printf("frame 0: %v frame typ: %T \n", frame, frame)
 	dispFrame(frame)
 //	p := make([]byte, 24 + 9)
 //    buf := make([]byte, 512)
@@ -122,13 +137,13 @@ func main () {
 	fmt.Println("\n*** frame 1 ***")
 	frame1, err := framer.ReadFrame()
 	printErr("read frame", err)
-	fmt.Printf("frame 1: %v\n", frame1)
+	fmt.Printf("frame 1: %v %T\n", frame1, frame1)
 	dispFrame(frame1)
 
 	fmt.Println("\n*** frame 2 ***")
 	frame2, err := framer.ReadFrame()
 	printErr("read frame", err)
-	fmt.Printf("frame 2: %v\n", frame2)
+	fmt.Printf("frame 2: %v %T\n", frame2, frame2)
 	dispFrame(frame2)
 
 }
