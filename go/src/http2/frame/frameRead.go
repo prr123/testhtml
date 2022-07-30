@@ -64,15 +64,21 @@ func dispFrame (frame http2.Frame) {
 	fmt.Printf("fh flag: %d\n", frame.Header().Flags)
 	fmt.Printf("fh length: %d\n", frame.Header().Length)
 	fmt.Printf("fh streamid: %d\n", frame.Header().StreamID)
+/*
 	if frame.Header().Type == 4 {
 		idnum := frame.Header().Length/6
 		fmt.Printf("settings: %d\n", idnum)
 
 	}
-
+*/
 	switch frame.(type) {
 		case *http2.SettingsFrame:
-			fmt.Println("Settings Frame")
+			fmt.Println("Settings Frame:")
+//			fh := frame.Header()
+//			pl := frame.Payload()
+//			f := &http2.SettingsFrame{FrameHeader: fh, PayLoad: pl}
+			f := frame.(*http2.SettingsFrame)
+			f.SettingsDisp()
 
 		default:
 		fmt.Println("not known yet!")
@@ -120,19 +126,6 @@ func main () {
 	printErr("read frame", err)
 	fmt.Printf("frame 0: %v frame typ: %T \n", frame, frame)
 	dispFrame(frame)
-//	p := make([]byte, 24 + 9)
-//    buf := make([]byte, 512)
-/*
-    for {
-        n, err := conn.Read(buf)
-        if err == io.EOF {
-            break
-        }
-
-	_, err = io.ReadFull(conn,p)
-	printErr("read frame byte", err)
-	fmt.Printf("p [%d]: %x\n", len(p), p)
-*/
 
 	fmt.Println("\n*** frame 1 ***")
 	frame1, err := framer.ReadFrame()
