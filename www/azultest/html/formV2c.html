@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="blog about software writing and using">
+  <meta name="keywords" content="Go">
+  <meta name="author" content="prr">
+  <meta name="date" content="1\3\2021">
+  <meta  name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azul Software</title><style>
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  list-style: none;
+  text-decoration:none;
+}
+
+#main {
+	border: 1px solid blue;
+	min-height: 300px
+}
+
+#form {
+	margin: 1em;
+	border: 1px solid red;
+	font-size: 16pt;
+	padding-left: 1em;
+	width: 300px;
+}
+.inpfield {
+	display: block;
+	margin: 1em 0 1em 0;
+	font-size: 16pt;
+	width: 200px;
+	height: 1em;
+	padding: 0.5em;
+}
+.inplabel {
+	display: block;
+}
+#subut {
+	background-color: green;
+	font-size: 16pt;
+	color: white;
+	width: calc(200px + 1em);
+	margin-left: calc(50% - 100px -0.5em);
+	margin-bottom: 1em;
+	padding: 0.5em;
+	vertical-align:middle;
+	border-radius: 15px;
+}
+#subut:hover {
+	color:red;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+ <div id="main">
+  <h1>Hello from Server</h1>
+	<form id = "form" method="post">
+	<ul>
+  	  <li>
+        <label class="inplabel" for="name">Name:</label>
+        <input class="inpfield" type="text" id="name" name="usrname" Placeholder="Name"/>
+      </li>
+      <li>
+        <label class="inplabel" for="mail">E-mail:</label>
+        <input class="inpfield" type="email" id="mail" name="usremail">
+     </li>
+   </ul>
+	<button id="subut" type="submit">Send your message</button>
+</form>
+
+ </div>
+ <script>
+var form = document.getElementById('form');
+ 
+var formdata = new FormData();
+
+async function subfunc(e) {
+    // Prevent default behavior:
+    e.preventDefault();
+
+	var nam = document.getElementById('name').value;
+	var em = document.getElementById('mail').value;
+	var objdat = JSON.stringify({'form':'testform', 'data':{'usrnam':nam, 'usremail':em}}); 
+  	e.preventDefault();
+	fetch('https://localhost:8002/', {
+    method: 'POST', 	
+	headers: {
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json'
+  	},
+    body: objdat,
+    })
+}
+
+form.addEventListener('submit', subfunc)
+
+ </script>
+</body>
+</html>
